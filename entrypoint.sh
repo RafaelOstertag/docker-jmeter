@@ -15,14 +15,26 @@ echo "START Running Jmeter on `date`"
 echo "JVM_ARGS=${JVM_ARGS}"
 echo "jmeter args=$@"
 
-# Keep entrypoint simple: we must pass the standard JMeter arguments
-jmeter $@
-echo "END Running Jmeter on `date`"
+if [ -z "${OUTPUTDIR}" ]
+then
+    echo "Please set \$OUTPUTDIR" 1>&2
+    exit 1
+fi
 
-#     -n \
-#    -t "/tests/${TEST_DIR}/${TEST_PLAN}.jmx" \
-#    -l "/tests/${TEST_DIR}/${TEST_PLAN}.jtl"
-# exec tail -f jmeter.log
-#    -D "java.rmi.server.hostname=${IP}" \
-#    -D "client.rmi.localport=${RMI_PORT}" \
-#  -R $REMOTE_HOSTS
+if [ -z "${TESTPLAN}" ]
+then
+    echo "Please set \$TESTPLAN to a test plan file" 1>&2
+    exit 2
+fi
+
+if ! [ -f "${TESTPLAN}" ]
+then
+    echo "Test plan $TESTPLAN does not exist" 1>&2
+    exit 3
+fi
+
+per_instance_output="${OUTPUTDIR}/${HOSTNAME}"
+
+
+jmeter -n -t "${TESTPLAN}" -l "${per_instance_output}/results.csv" -j "${per_instance_output}/log" -e -o "${per_instance_output}/report"
+echo "END Running Jmeter on `date`"
