@@ -2,7 +2,7 @@
 # https://github.com/hhcordero/docker-jmeter-server/blob/master/Dockerfile
 FROM alpine:3.9
 
-MAINTAINER Rafael Ostertag <rafi@guengel.ch>
+LABEL maintainer="rafi@uengel.ch"
 
 ARG JMETER_VERSION="5.1.1"
 ENV JMETER_HOME /opt/apache-jmeter-${JMETER_VERSION}
@@ -12,11 +12,8 @@ ENV	JMETER_PLUGINS_MANAGER_VERSION  1.3
 ENV CMDRUNNER_VERSION 2.2
 ENV JSON_LIB_VERSION 2.4
 ENV JSON_LIB_FULL_VERSION ${JSON_LIB_VERSION}-jdk15
+ENV TZ ${TZ:-Europe/Zurich}
 
-# Install extra packages
-# See https://github.com/gliderlabs/docker-alpine/issues/136#issuecomment-272703023
-# Change TimeZone TODO: TZ still is not set!
-ARG TZ="Europe/Amsterdam"
 RUN    apk update \
 	&& apk upgrade \
 	&& apk add ca-certificates \
