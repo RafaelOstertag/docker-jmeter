@@ -29,5 +29,5 @@ fi
 per_instance_output="${OUTPUTDIR}/${HOSTNAME}"
 
 
-jmeter -n -t "${TESTPLAN}" -l "${per_instance_output}/results.csv" -j "${per_instance_output}/log" -e -o "${per_instance_output}/report"
+jmeter -n -t "${TESTPLAN}" -l "${per_instance_output}/results.csv" -j "${per_instance_output}/log" -e -o "${per_instance_output}/report" ${JMETER_ARGS} "$@"
 echo "END Running Jmeter on `date`"
